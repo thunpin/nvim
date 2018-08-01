@@ -1,0 +1,18 @@
+#!/bin/sh
+
+INSTALL_PATH="$(cd $(dirname $0)/../ ; pwd -P )"
+
+cat > "$HOME/.vimrc.go" <<EOF
+set runtimepath^="$INSTALL_PATH"
+
+source $INSTALL_PATH/vimrc/basic.vim
+
+try
+  source $INSTALL_PATH/custom_config.vim
+catch
+endtry
+EOF
+
+echo 'Installed w/o any issues! Start producing your Latex magic now :-)'
+echo "Hint: vim -u ~/.vimrc.go"
+
