@@ -21,7 +21,7 @@ vim-go https://github.com/fatih/vim-go
 syntastic https://github.com/scrooloose/syntastic
 neocomplete.vim https://github.com/Shougo/neocomplete.vim
 neosnippet.vim https://github.com/Shougo/neosnippet.vim
-hvim-hcl ttps://github.com/b4b4r07/vim-hcl
+vim-hashicorp-tools.git git clone https://github.com/hashivim/vim-hashicorp-tools.git
 """.strip()
 
 GITHUB_ZIP = '%s/archive/master.zip'
