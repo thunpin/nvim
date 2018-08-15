@@ -22,6 +22,7 @@ syntastic https://github.com/scrooloose/syntastic
 neocomplete.vim https://github.com/Shougo/neocomplete.vim
 neosnippet.vim https://github.com/Shougo/neosnippet.vim
 vim-hashicorp-tools https://github.com/hashivim/vim-hashicorp-tools
+vim-yaml https://github.com/avakhov/vim-yaml
 """.strip()
 
 GITHUB_ZIP = '%s/archive/master.zip'
