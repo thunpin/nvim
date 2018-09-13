@@ -8,6 +8,7 @@ import requests
 from os import path
 
 #neocomplete.vim https://github.com/Shougo/neocomplete.vim
+#neosnippet.vim https://github.com/Shougo/neosnippet.vim
 #--- Globals ----------------------------------------------
 PLUGINS = """
 gruvbox https://github.com/morhetz/gruvbox
@@ -21,7 +22,7 @@ deoplete.nvim https://github.com/Shougo/deoplete.nvim
 defx.nvim https://github.com/Shougo/defx.nvim
 vim-hashicorp-tools https://github.com/hashivim/vim-hashicorp-tools
 vim-yaml https://github.com/avakhov/vim-yaml
-neosnippet.vim https://github.com/Shougo/neosnippet.vim
+deoplete-go https://github.com/zchee/deoplete-go
 """.strip()
 
 GITHUB_ZIP = '%s/archive/master.zip'
