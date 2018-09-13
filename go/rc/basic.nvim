@@ -5,7 +5,7 @@
 
 " let's make sure we are in noncompatble mode
 set nocp
-call pathogen#infect('~/.vim_go_runtime/bundle/{}')
+call pathogen#infect('~/.config/nvim/go/bundle/{}')
 
 " Sets how many lines of history VIM has to remember
 set history=700
@@ -452,31 +452,6 @@ endfunction
 
 
 "------------------------------------------------------------------------------
-" NERDTree
-"------------------------------------------------------------------------------
-
-" General properties
-let NERDTreeShowHidden=1
-let NERDTreeDirArrows=1
-let NERDTreeMinimalUI=1
-let NERDTreeIgnore=['\.o$', '\.pyc$', '\.php\~$']
-let NERDTreeWinSize = 35
-
-" Make sure that when NT root is changed, Vim's pwd is also updated
-let NERDTreeChDirMode = 2
-let NERDTreeShowLineNumbers = 1
-let NERDTreeAutoCenter = 1
-
-" Open NERDTree on startup, when no file has been specified
-autocmd VimEnter * if !argc() | NERDTree | endif
-
-" Locate file in hierarchy quickly
-map <leader>T :NERDTreeFind<cr>
-
-" Toogle on/off
-nmap <leader>o :NERDTreeToggle<cr>
-
-"------------------------------------------------------------------------------
 " Vim-go
 "------------------------------------------------------------------------------
 let g:go_fmt_fail_silently = 1
@@ -553,67 +528,66 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 "------------------------------------------------------------------------------
-" NeoComplete
+" Deoplete 
 "------------------------------------------------------------------------------
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#enable_auto_select = 1
 
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
 
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
+"------------------------------------------------------------------------------
+" Denite
+"------------------------------------------------------------------------------
+call denite#custom#map('insert','<Up>','<denite:move_to_previous_line>','noremap')
+call denite#custom#map('insert','<Down>','<denite:move_to_next_line>','noremap')
 
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
 
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 
-" Close popup by <Space>.
-" inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-"inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+"------------------------------------------------------------------------------
+" Defx 
+"------------------------------------------------------------------------------
+let foo = getcwd()
+set splitright
+autocmd FileType defx call s:defx_my_settings()
+	function! s:defx_my_settings() abort
+	  " Define mappings
+	  nnoremap <silent><buffer><expr> <CR>
+	  \ defx#do_action('open', 'vsplit')
+	  nnoremap <silent><buffer><expr> l
+	  \ defx#do_action('open')
+	  nnoremap <silent><buffer><expr> E
+	  \ defx#do_action('open', 'vsplit')
+	  nnoremap <silent><buffer><expr> P
+	  \ defx#do_action('open', 'pedit')
+	  nnoremap <silent><buffer><expr> K
+	  \ defx#do_action('new_directory')
+	  nnoremap <silent><buffer><expr> N
+	  \ defx#do_action('new_file')
+	  nnoremap <silent><buffer><expr> d
+	  \ defx#do_action('remove')
+	  nnoremap <silent><buffer><expr> r
+	  \ defx#do_action('rename')
+	  nnoremap <silent><buffer><expr> x
+	  \ defx#do_action('execute_system')
+	  nnoremap <silent><buffer><expr> h 
+	  \ defx#do_action("cd", g:foo)
+	  nnoremap <silent><buffer><expr> <BS>
+	  \ defx#do_action('cd', ['..'])
+	  nnoremap <silent><buffer><expr> ~
+	  \ defx#do_action('cd')
+	  nnoremap <silent><buffer><expr> q
+	  \ defx#do_action('quit')
+	  nnoremap <silent><buffer><expr> <Space>
+	  \ defx#do_action('toggle_select') . 'j'
+	  nnoremap <silent><buffer><expr> *
+	  \ defx#do_action('toggle_select_all')
+	  nnoremap <silent><buffer><expr> j
+	  \ line('.') == line('$') ? 'gg' : 'j'
+	  nnoremap <silent><buffer><expr> k
+	  \ line('.') == 1 ? 'G' : 'k'
+	  nnoremap <silent><buffer><expr> <C-l>
+	  \ defx#do_action('redraw')
+	  nnoremap <silent><buffer><expr> <C-g>
+	  \ defx#do_action('print')
 endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplete#close_popup()
-inoremap <expr><C-e>  neocomplete#cancel_popup()
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
-" AutoComplPop like behavior.
-let g:neocomplete#enable_auto_select = 1
-
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-" Enable heavy omni completion.
-"if !exists('g:neocomplete#sources#omni#input_patterns')
-"  let g:neocomplete#sources#omni#input_patterns = {}
-"endif
-"let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
-if !exists('g:neocomplete#force_omni_input_patterns')
-  let g:neocomplete#force_omni_input_patterns = {}
-endif
-let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
-
-"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-

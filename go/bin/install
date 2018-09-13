@@ -2,17 +2,17 @@
 
 INSTALL_PATH="$(cd $(dirname $0)/../ ; pwd -P )"
 
-cat > "$HOME/.vimrc.go" <<EOF
+cat > "$HOME/.nvimrc.go" <<EOF
 set runtimepath^="$INSTALL_PATH"
 
-source $INSTALL_PATH/vimrc/basic.vim
+source $INSTALL_PATH/rc/basic.nvim
 
 try
-  source $INSTALL_PATH/custom_config.vim
+  source $INSTALL_PATH/custom.nvim
 catch
 endtry
 EOF
 
 echo 'Installed w/o any issues! Start producing your Latex magic now :-)'
-echo "Hint: vim -u ~/.vimrc.go"
+echo "Hint: vim -u ~/.nvimrc.go"
 
