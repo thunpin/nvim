@@ -45,8 +45,8 @@ set colorcolumn=80
 " Avoid garbled characters in Chinese language windows OS
 let $LANG='en'
 set langmenu=en
-source $VIMRUNTIME/delmenu.vim
-source $VIMRUNTIME/menu.vim
+"source $VIMRUNTIME/delmenu.vim
+"source $VIMRUNTIME/menu.vim
 
 " Turn on the WiLd menu
 set wildmenu
@@ -60,13 +60,6 @@ set cursorline
 " Completion options (select longest + show menu even if a single match is found)
 set completeopt=longest,menuone
 
-" Ignore compiled files
-set wildignore=*.o,*~,*.pyc
-if has("win16") || has("win32")
-    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
-else
-    set wildignore+=.git\*,.hg\*,.svn\*
-endif
 
 " Show line, column number, and relative position within a file in the status line
 set ruler
@@ -91,9 +84,6 @@ endif
 
 " Allow smarter completion by infering the case
 set infercase
-
-" Ignore case when searching
-set ignorecase
 
 " When searching try to be smart about cases
 set smartcase
@@ -221,7 +211,10 @@ set ai "Auto indent
 set si "Smart indent
 set nowrap "Don't Wrap lines (it is stupid)
 
-
+au FileType go set noexpandtab
+au FileType go set shiftwidth=4
+au FileType go set softtabstop=4
+au FileType go set tabstop=4
 "------------------------------------------------------------------------------
 " Visual mode related
 "------------------------------------------------------------------------------
@@ -232,68 +225,6 @@ vnoremap <silent> * :call VisualSelection('f', '')<CR>
 vnoremap <silent> # :call VisualSelection('b', '')<CR>
 
 
-"------------------------------------------------------------------------------
-" Moving around, tabs, windows and buffers
-"------------------------------------------------------------------------------
-
-" Treat long lines as break lines (useful when moving around in them)
-map j gj
-map k gk
-
-" Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
-map <space> /
-map <c-space> ?
-
-" Disable highlight when <leader><cr> is pressed
-map <silent> <leader><cr> :noh<cr>
-
-" Smart way to move between windows
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
-
-" Close the current buffer (w/o closing the current window)
-map <leader>bd :Bclose<cr>
-
-" Close all the buffers
-map <leader>bda :1,1000 bd!<cr>
-
-" Useful mappings for managing tabs
-map <leader>tn :tabnew<cr>
-map <leader>to :tabonly<cr>
-map <leader>tc :tabclose<cr>
-map <leader>tm :tabmove
-map <leader>tj :tabnext
-map <leader>tk :tabprevious
-
-" Let 'tl' toggle between this and the last accessed tab
-let g:lasttab = 1
-nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
-au TabLeave * let g:lasttab = tabpagenr()
-
-
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
-map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
-
-" Switch CWD to the directory of the open buffer
-map <leader>cd :cd %:p:h<cr>:pwd<cr>
-
-" Specify the behavior when switching between buffers
-try
-  set switchbuf=useopen,usetab,newtab
-  set stal=2
-catch
-endtry
-
-" Return to last edit position when opening files (You want this!)
-autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exe "normal! g`\"" |
-     \ endif
-" Remember info about open buffers on close
-set viminfo^=%
 
 
 "------------------------------------------------------------------------------
@@ -454,18 +385,18 @@ endfunction
 "------------------------------------------------------------------------------
 " Vim-go
 "------------------------------------------------------------------------------
-let g:go_fmt_fail_silently = 1
+"let g:go_fmt_fail_silently = 1
 let g:go_fmt_command = "gofmt" "Explicited the formater plugin (gofmt, goimports, goreturn...)
 
 " Show a list of interfaces which is implemented by the type under your cursor
-au FileType go nmap <Leader>s <Plug>(go-implements)
+au FileType go nmap <Leader>gs <Plug>(go-implements)
 
 " Show type info for the word under your cursor
 au FileType go nmap <Leader>i <Plug>(go-info)
 
 " Open the relevant Godoc for the word under the cursor
 au FileType go nmap <Leader>gd <Plug>(go-doc)
-au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+au FileType go nmap <Leader>gt <Plug>(go-doc-tab)
 
 " Open the Godoc in browser
 au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
@@ -478,9 +409,18 @@ au FileType go nmap <leader>c <Plug>(go-coverage)
 
 " By default syntax-highlighting for Functions, Methods and Structs is disabled.
 " Let's enable them!
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
 let g:go_highlight_structs = 1
+let g:go_highlight_types = 1
+let g:go_auto_type_info = 1
+let g:deoplete#enable_at_startup = 1
+let g:go_addtags_transform = "snakecase"
+let g:go_snippet_engine = "neosnippet"
 
 nmap <F8> :TagbarToggle<CR>
 let g:tagbar_type_go = {
@@ -528,7 +468,7 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 "------------------------------------------------------------------------------
-" Deoplete 
+" Deoplete
 "------------------------------------------------------------------------------
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
@@ -545,7 +485,7 @@ call denite#custom#map('insert','<Down>','<denite:move_to_next_line>','noremap')
 
 
 "------------------------------------------------------------------------------
-" Defx 
+" Defx
 "------------------------------------------------------------------------------
 let foo = getcwd()
 set splitright
@@ -570,7 +510,7 @@ autocmd FileType defx call s:defx_my_settings()
 	  \ defx#do_action('rename')
 	  nnoremap <silent><buffer><expr> x
 	  \ defx#do_action('execute_system')
-	  nnoremap <silent><buffer><expr> h 
+	  nnoremap <silent><buffer><expr> h
 	  \ defx#do_action("cd", g:foo)
 	  nnoremap <silent><buffer><expr> <BS>
 	  \ defx#do_action('cd', ['..'])
