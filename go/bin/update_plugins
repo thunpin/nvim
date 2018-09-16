@@ -25,6 +25,7 @@ vim-yaml https://github.com/avakhov/vim-yaml
 deoplete-go https://github.com/zchee/deoplete-go
 vim-airline https://github.com/vim-airline/vim-airline
 vim-gitgutter https://github.com/airblade/vim-gitgutter
+dbext.vim https://github.com/vim-scripts/dbext.vim
 """.strip()
 
 GITHUB_ZIP = '%s/archive/master.zip'
