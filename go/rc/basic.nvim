@@ -481,7 +481,8 @@ let g:deoplete#enable_auto_select = 1
 "------------------------------------------------------------------------------
 call denite#custom#map('insert','<Up>','<denite:move_to_previous_line>','noremap')
 call denite#custom#map('insert','<Down>','<denite:move_to_next_line>','noremap')
-map <C-d> :Denite file_rec <cr>
+map <C-d> :Denite file_rec<cr>
+map <C-f> :Defx<cr>
 
 
 
